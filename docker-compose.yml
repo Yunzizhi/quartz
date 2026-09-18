@@ -1,16 +1,12 @@
-version: '3.8'
-
 services:
   quartz:
     build: .
     container_name: quartz-site
     restart: unless-stopped
     ports:
-      - "127.0.0.1:8080:80"   # 仅监听本地，由宿主机 Nginx 代理
+      - "127.0.0.1:8080:8080"   # 宿主机 8080 → 容器 8080
+    command: npx quartz build --serve --port 8080 --host 0.0.0.0
     environment:
-      # Webhook 密钥（至少 16 位随机字符串）
       REBUILD_WEBHOOK_SECRET: "你的随机密钥"
-      # 自动重建延迟（秒）
       BUILD_UPDATE_DELAY: 30
-      # 启用自动重建
       AUTO_REBUILD: "true"
